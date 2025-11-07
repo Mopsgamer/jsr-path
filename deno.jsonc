@@ -1,0 +1,37 @@
+{
+  "name": "@m234/path",
+  "description": "Sort, parse and format a path array/object.",
+  "version": "0.1.0",
+  "tasks": {
+    "publish": {
+      "command": "deno publish",
+      "dependencies": ["prepare"]
+    },
+    "prepare": "deno check && deno test --coverage && deno lint && deno task badge:tests && deno fmt",
+    "badge:tests": "deno run -A scripts/badge-tests.ts"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["jsr"]
+    }
+  },
+  "publish": {
+    "include": [
+      "README.*",
+      "deno.*",
+      "**/*.ts"
+    ],
+    "exclude": [
+      // https://github.com/jsr-io/jsr/issues/566
+      "**/*.*.ts",
+      "scripts"
+    ]
+  },
+  "license": "MIT",
+  "exports": {
+    ".": "./main.ts",
+    "./convert": "./convert.ts",
+    "./sort": "./sort.ts",
+    "./format": "./format.ts"
+  }
+}
