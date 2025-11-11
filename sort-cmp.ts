@@ -3,6 +3,7 @@ import { shiftPath } from "./shift.ts";
 
 /**
  * Contains all file sort names.
+ * @see {@link SortName}
  */
 export const sortNameList = [
   "firstFolders",
@@ -18,6 +19,10 @@ export const sortNameList = [
  * Folders are displayed before files.
  * `firstFiles` - Files and folders are sorted by their names.
  * Files are displayed before folders.
+ * `fileType` - Files and folders are grouped by extension type then sorted by thir names.
+ * Folders are displayed before files.
+ * `mixed` - Files and folders are sorted by their names.
+ * Files are interwoven with folders.
  * `modified` - Files and folders are sorted by last modified date in descending order.
  * Folders are displayed before files.
  */
@@ -29,7 +34,7 @@ export type SortName = typeof sortNameList[number];
 export type SortFunction = (a: string, b: string) => number;
 
 /**
- * Checks if the value is the {@link SortName}.
+ * Checks if the value is a valid {@link SortName}.
  */
 export function isSortName(value: unknown): value is SortName {
   return typeof value === "string" && sortNameList.includes(value as SortName);
