@@ -53,11 +53,17 @@ export function* pathRecordToGenerator(
   }
   function* proc(
     parentRecord: Record<string, PathRecord>,
-    parentInfo: PathInfo,
+    parentInfo: PathInfo | null,
   ): Generator<PathInfo> {
     const entries = Object.entries(parentRecord);
     for (let [i, [base, record]] of entries.entries()) {
-      let info = structuredClone(parentInfo);
+      let info = structuredClone(parentInfo) ?? {
+        indent: [],
+        path: "",
+        base: "",
+        parent: null,
+        record: rootRecord,
+      };
       let position: EntryPosition = null;
       switch (i) {
         case entries.length - 1:
@@ -91,13 +97,7 @@ export function* pathRecordToGenerator(
       }
     }
   }
-  yield* proc(rootRecord, {
-    indent: [],
-    path: "",
-    base: "",
-    parent: null,
-    record: rootRecord,
-  });
+  yield* proc(rootRecord, null);
 }
 
 /**

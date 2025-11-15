@@ -175,12 +175,28 @@ Deno.test("pathRecordToGenerator - accepts array argument", () => {
   const input: PathRecord = ["a/b.txt", "c/d.txt"];
   const list = Array.from(
     pathRecordToGenerator(input),
-    ({ path, indent }) => ({ path, indent }),
+    ({ path, indent, base, parent }) => ({
+      base,
+      path,
+      indent,
+      parent: parent &&
+        { base: parent.base, path: parent.path, indent: parent.indent },
+    }),
   );
   assertEquals(list, [
-    { path: "a", indent: ["first"] },
-    { path: "a/b.txt", indent: ["first", "last"] },
-    { path: "c", indent: ["last"] },
-    { path: "c/d.txt", indent: ["last", "last"] },
+    { path: "a", indent: ["first"], base: "a", parent: null },
+    {
+      path: "a/b.txt",
+      indent: ["first", "last"],
+      base: "b.txt",
+      parent: { base: "a", path: "a", indent: ["first"] },
+    },
+    { path: "c", indent: ["last"], base: "c", parent: null },
+    {
+      path: "c/d.txt",
+      indent: ["last", "last"],
+      base: "d.txt",
+      parent: { base: "c", path: "c", indent: ["last"] },
+    },
   ]);
 });
