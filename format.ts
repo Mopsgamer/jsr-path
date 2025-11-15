@@ -1,5 +1,5 @@
 import { pathRecordToGenerator } from "./convert.ts";
-import type { PathInfo, PathRecord } from "./convert.ts";
+import type { PathInfo, PathObject } from "./convert.ts";
 
 /**
  * Function type for formatting a path info object.
@@ -35,7 +35,7 @@ export function formatDefault(info: PathInfo): string {
  * @returns Formatted string representation of the paths.
  */
 export function format(
-  record: Record<string, PathRecord>,
+  record: PathObject,
   formatter: Formatter = formatDefault,
 ): string {
   return Array.from(pathRecordToGenerator(record), (info) => formatter(info))

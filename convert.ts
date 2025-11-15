@@ -3,9 +3,14 @@ import { shiftPath } from "./shift.ts";
 /**
  * Type representing a nested object of paths.
  */
-export type PathRecord = string[] | string | {
+export type PathObject = {
   [key: string]: PathRecord;
 };
+
+/**
+ * Type representing a nested object of paths or an array of paths or a single path string.
+ */
+export type PathRecord = string[] | string | PathObject;
 
 /**
  * Position of an entry within its parent.
@@ -52,7 +57,7 @@ export function* pathRecordToGenerator(
     rootRecord = pathObjectFrom(rootRecord);
   }
   function* proc(
-    parentRecord: Record<string, PathRecord>,
+    parentRecord: PathObject,
     parentInfo: PathInfo | null,
   ): Generator<PathInfo> {
     const entries = Object.entries(parentRecord);
@@ -77,7 +82,7 @@ export function* pathRecordToGenerator(
       info.record = record;
       info.base = base;
       const isTopLevel = Boolean(
-        (rootRecord as Record<string, PathRecord>)[base] === record,
+        (rootRecord as PathObject)[base] === record,
       );
       if (isTopLevel) {
         info.path = base;
@@ -91,7 +96,7 @@ export function* pathRecordToGenerator(
           if (Array.isArray(record)) {
             record = pathObjectFrom(record);
           }
-          yield* proc(record as Record<string, PathRecord>, info);
+          yield* proc(record as PathObject, info);
           break;
         }
       }
@@ -123,7 +128,7 @@ export function pathRecordFilesSet(record: PathRecord): Set<string> {
  */
 export function pathObjectFrom(
   iterable: Iterable<string>,
-): Record<string, PathRecord> {
+): PathObject {
   let root: PathRecord = {};
 
   for (const element of iterable) {
