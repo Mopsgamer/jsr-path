@@ -74,8 +74,7 @@ export function* pathRecordToGenerator(
         (rootRecord as Record<string, PathRecord>)[base] === record,
       );
       if (isTopLevel) {
-        // deno-coverage-ignore
-        info.path = (parentInfo.path && parentInfo + "/") + base;
+        info.path = base;
       } else {
         info.path = info.path + "/" + base;
       }
@@ -131,19 +130,18 @@ export function pathObjectFrom(
     let [next, other, isLast] = shiftPath(element);
 
     let parent: PathRecord = root;
-    let child: PathRecord = {};
+    if (isLast) {
+      parent[next] = "";
+      continue;
+    }
 
+    let child: PathRecord = parent[next] ?? {};
     parent[next] = child;
 
-    while (true) {
-      if (isLast) {
-        parent[next] = "";
-        break;
-      }
-
-      parent = child;
+    while (!isLast || (parent[next] = "")) {
+      parent = child as { [key: string]: PathRecord };
       [next, other, isLast] = shiftPath(other);
-      child = {};
+      child = parent[next] ?? {};
       parent[next] = child;
     }
   }

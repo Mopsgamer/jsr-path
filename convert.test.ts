@@ -44,12 +44,21 @@ Deno.test("pathObjectFrom - simple paths", () => {
 });
 
 Deno.test("pathObjectFrom - nested paths", () => {
-  const input = ["foo/bar/baz", "qux/quux"];
+  const input = [
+    "foo/bar",
+    "foo/abc",
+    "foo/xyz/x",
+    "foo/xyz/y",
+    "foo/def",
+    "baz/qux",
+    "corge/grault/garply",
+  ];
   const expected = {
-    "foo": {
-      "bar": { "baz": "" },
+    "foo": { "bar": "", "abc": "", "xyz": { "x": "", "y": "" }, "def": "" },
+    "baz": { "qux": "" },
+    "corge": {
+      "grault": { "garply": "" },
     },
-    "qux": { "quux": "" },
   };
   assertEquals(pathObjectFrom(input), expected);
 });
