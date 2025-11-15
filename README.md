@@ -81,3 +81,27 @@ sortFirstFolders(paths);
 //   "z/file.txt"
 // ]
 ```
+
+Format path array to string:
+
+```ts
+import { format } from "@m234/path";
+
+const paths = [
+  "src/components/Button.tsx",
+  "src/utils/helpers.ts",
+  "public/index.html",
+];
+
+const obj = pathObjectFrom(paths);
+
+console.log(format(obj));
+// Output:
+// ├── src
+// │   ├── components
+// │   │   └── Button.tsx
+// │   └── utils
+// │       └── helpers.ts
+// └── public
+//     └── index.html
+```
