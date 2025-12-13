@@ -30,13 +30,25 @@ Deno.test("type comparator groups by extension then name", () => {
 });
 
 Deno.test("sort.cmpFirstFolders puts folders before files", () => {
-  assertEquals(["dir", "dir/file"].sort(sort.cmpFirstFolders), ["dir/file", "dir"]);
-  assertEquals(["src/targets/yarn.ts", "src/...+16"].sort(sort.cmpFirstFolders), ["src/...+16", "src/targets/yarn.ts"]);
+  assertEquals(["dir", "dir/file"].sort(sort.cmpFirstFolders), [
+    "dir/file",
+    "dir",
+  ]);
+  assertEquals(
+    ["src/targets/yarn.ts", "src/...+16"].sort(sort.cmpFirstFolders),
+    ["src/...+16", "src/targets/yarn.ts"],
+  );
 });
 
 Deno.test("sort.cmpFirstFiles puts files before folders", () => {
-  assertEquals(["dir", "dir/file"].sort(sort.cmpFirstFiles), ["dir", "dir/file"]);
-  assertEquals(["src/targets/yarn.ts", "src/...+16"].sort(sort.cmpFirstFiles), ["src/...+16", "src/targets/yarn.ts"]);
+  assertEquals(["dir", "dir/file"].sort(sort.cmpFirstFiles), [
+    "dir",
+    "dir/file",
+  ]);
+  assertEquals(["src/targets/yarn.ts", "src/...+16"].sort(sort.cmpFirstFiles), [
+    "src/...+16",
+    "src/targets/yarn.ts",
+  ]);
 });
 
 Deno.test("sort.isSortName - non-string returns false", () => {
@@ -111,7 +123,11 @@ Deno.test("sort-iterable: sortsort.cmpFirstFiles basic", () => {
 });
 
 Deno.test("sort-iterable: sortFileType basic", () => {
-  assertEquals(sort.sortFileType(["a.txt", "b.md", "a.md"]), ["a.md", "b.md", "a.txt"]);
+  assertEquals(sort.sortFileType(["a.txt", "b.md", "a.md"]), [
+    "a.md",
+    "b.md",
+    "a.txt",
+  ]);
 });
 
 Deno.test("sort-iterable: sortMixed basic", () => {
