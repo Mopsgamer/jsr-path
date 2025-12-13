@@ -19,30 +19,24 @@ Deno.test("sort.isSortName - true/false", () => {
 });
 
 Deno.test("mixed comparator orders strings", () => {
-  const a = sort.cmpMixed("a", "b");
-  const b = sort.cmpMixed("b", "a");
-  assertLess(a, 0);
-  assertGreater(b, 0);
+  assertLess(sort.cmpMixed("a", "b"), 0);
+  assertGreater(sort.cmpMixed("b", "a"), 0);
   assertEquals(sort.cmpMixed("same", "same"), 0);
 });
 
 Deno.test("type comparator groups by extension then name", () => {
-  const cmp = sort.cmpFileType("file.md", "file.txt");
-  assertLess(cmp, 0);
-  const cmp2 = sort.cmpFileType("a.txt", "b.txt");
-  assertLess(cmp2, 0);
+  assertLess(sort.cmpFileType("file.md", "file.txt"), 0);
+  assertLess(sort.cmpFileType("a.txt", "b.txt"), 0);
 });
 
 Deno.test("sort.cmpFirstFolders puts folders before files", () => {
-  const arr = ["dir", "dir/file"];
-  arr.sort(sort.cmpFirstFolders);
-  assertEquals(arr, ["dir/file", "dir"]);
+  assertEquals(["dir", "dir/file"].sort(sort.cmpFirstFolders), ["dir/file", "dir"]);
+  assertEquals(["src/targets/yarn.ts", "src/...+16"].sort(sort.cmpFirstFolders), ["src/...+16", "src/targets/yarn.ts"]);
 });
 
 Deno.test("sort.cmpFirstFiles puts files before folders", () => {
-  const arr = ["dir", "dir/file"];
-  arr.sort(sort.cmpFirstFiles);
-  assertEquals(arr, ["dir", "dir/file"]);
+  assertEquals(["dir", "dir/file"].sort(sort.cmpFirstFiles), ["dir", "dir/file"]);
+  assertEquals(["src/targets/yarn.ts", "src/...+16"].sort(sort.cmpFirstFiles), ["src/...+16", "src/targets/yarn.ts"]);
 });
 
 Deno.test("sort.isSortName - non-string returns false", () => {
@@ -109,27 +103,19 @@ Deno.test("sort.cmpFirstFolders/sort.cmpFirstFiles equal names return 0", () => 
 });
 
 Deno.test("sort-iterable: sortFirstFolders basic", () => {
-  const input = ["dir", "dir/file"];
-  const out = sort.sortFirstFolders(input);
-  assertEquals(out, ["dir/file", "dir"]);
+  assertEquals(sort.sortFirstFolders(["dir", "dir/file"]), ["dir/file", "dir"]);
 });
 
 Deno.test("sort-iterable: sortsort.cmpFirstFiles basic", () => {
-  const input = ["dir", "dir/file"];
-  const out = sort.sortFirstFiles(input);
-  assertEquals(out, ["dir", "dir/file"]);
+  assertEquals(sort.sortFirstFiles(["dir", "dir/file"]), ["dir", "dir/file"]);
 });
 
 Deno.test("sort-iterable: sortFileType basic", () => {
-  const input = ["a.txt", "b.md", "a.md"];
-  const out = sort.sortFileType(input);
-  assertEquals(out, ["a.md", "b.md", "a.txt"]);
+  assertEquals(sort.sortFileType(["a.txt", "b.md", "a.md"]), ["a.md", "b.md", "a.txt"]);
 });
 
 Deno.test("sort-iterable: sortMixed basic", () => {
-  const input = ["b", "a", "c"];
-  const out = sort.sortMixed(input);
-  assertEquals(out, ["a", "b", "c"]);
+  assertEquals(sort.sortMixed(["b", "a", "c"]), ["a", "b", "c"]);
 });
 
 Deno.test("sort-iterable: sortModified basic", () => {
