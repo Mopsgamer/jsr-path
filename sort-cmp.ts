@@ -55,6 +55,7 @@ export function cmpFirstFolders(a: string, b: string): number {
 
     comp = cmpMixed(next1, next2);
 
+    if (comp) break
     if (!last1 && !last2) continue;
     if (last1 && last2) break;
     if (!last1) return -1;
@@ -79,6 +80,7 @@ export function cmpFirstFiles(a: string, b: string): number {
 
     comp = cmpMixed(next1, next2);
 
+    if (comp) break
     if (!last1 && !last2) continue;
     if (last1 && last2) break;
     if (last1) return -1;
@@ -107,6 +109,7 @@ export function cmpModified(
 
     comp = timeb - timea || cmpMixed(next1, next2);
 
+    if (comp) break
     if (!last1 && !last2) continue;
     if (last1 && last2) break;
     if (!last1) return -1;
@@ -133,6 +136,7 @@ export function cmpFileType(a: string, b: string): number {
     const ppb = path.parse(next2);
     comp = cmpMixed(ppa.ext, ppb.ext) || cmpMixed(ppa.name, ppb.name);
 
+    if (comp) break
     if (!last1 && !last2) continue;
     if (last1 && last2) break;
     if (!last1) return -1;
