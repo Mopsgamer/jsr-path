@@ -38,25 +38,59 @@ Deno.test("type comparator groups by extension then name", () => {
 });
 
 Deno.test("sort.cmpFirstFolders puts folders before files", () => {
-  assertEquals(["dir", "dir/file"].sort(sort.cmpFirstFolders), [
-    "dir/file",
-    "dir",
-  ]);
   assertEquals(
-    ["src/targets/yarn.ts", "src/...+16"].sort(sort.cmpFirstFolders),
-    ["src/...+16", "src/targets/yarn.ts"],
+    ["df", "df/file"].sort(sort.cmpFirstFolders),
+    [
+      "df/file",
+      "df",
+    ],
+  );
+  assertEquals(
+    ["df/", "df/file"].sort(sort.cmpFirstFolders),
+    [
+      "df/",
+      "df/file",
+    ],
+  );
+  assertEquals(
+    ["src/targets/yarn.ts", "src/"].sort(sort.cmpFirstFolders),
+    ["src/", "src/targets/yarn.ts"],
+  );
+  assertEquals(
+    [".gitignore", ".vscode/extensions.json"].sort(sort.cmpFirstFolders),
+    [".vscode/extensions.json", ".gitignore"],
+  );
+  assertEquals(
+    [".gitignore", ".vscode/"].sort(sort.cmpFirstFolders),
+    [".vscode/", ".gitignore"],
+  );
+  assertEquals(
+    ["tsconfig.prod.json", "internal/patterns/gitignore.go"].sort(sort.cmpFirstFolders),
+    ["internal/patterns/gitignore.go", "tsconfig.prod.json"],
   );
 });
 
 Deno.test("sort.cmpFirstFiles puts files before folders", () => {
-  assertEquals(["dir", "dir/file"].sort(sort.cmpFirstFiles), [
-    "dir",
-    "dir/file",
+  assertEquals(["df", "df/file"].sort(sort.cmpFirstFiles), [
+    "df",
+    "df/file",
   ]);
-  assertEquals(["src/targets/yarn.ts", "src/...+16"].sort(sort.cmpFirstFiles), [
-    "src/...+16",
-    "src/targets/yarn.ts",
+  assertEquals(["df/", "df/file"].sort(sort.cmpFirstFiles), [
+    "df/",
+    "df/file",
   ]);
+  assertEquals(
+    ["src/targets/yarn.ts", "src/"].sort(sort.cmpFirstFiles),
+    ["src/", "src/targets/yarn.ts"],
+  );
+  assertEquals(
+    [".vscode/extensions.json", ".gitignore"].sort(sort.cmpFirstFiles),
+    [".gitignore", ".vscode/extensions.json"],
+  );
+  assertEquals(
+    [".vscode/", ".gitignore"].sort(sort.cmpFirstFiles),
+    [".gitignore", ".vscode/"],
+  );
 });
 
 Deno.test("sort.isSortName - non-string returns false", () => {
@@ -64,13 +98,13 @@ Deno.test("sort.isSortName - non-string returns false", () => {
 });
 
 Deno.test("sort.cmpFirstFolders comparator symmetric behaviour", () => {
-  assertLess(sort.cmpFirstFolders("dir/file", "dir"), 0);
-  assertGreater(sort.cmpFirstFolders("dir", "dir/file"), 0);
+  assertLess(sort.cmpFirstFolders("df/file", "df"), 0);
+  assertGreater(sort.cmpFirstFolders("df", "df/file"), 0);
 });
 
 Deno.test("sort.cmpFirstFiles comparator symmetric behaviour", () => {
-  assert(sort.cmpFirstFiles("dir", "dir/file") < 0);
-  assert(sort.cmpFirstFiles("dir/file", "dir") > 0);
+  assertLess(sort.cmpFirstFiles("df", "df/file"), 0);
+  assertGreater(sort.cmpFirstFiles("df/file", "df"), 0);
 });
 
 Deno.test("modified comparator", () => {
@@ -123,11 +157,13 @@ Deno.test("sort.cmpFirstFolders/sort.cmpFirstFiles equal names return 0", () => 
 });
 
 Deno.test("sort-iterable: sortFirstFolders basic", () => {
-  assertEquals(sort.sortFirstFolders(["dir", "dir/file"]), ["dir/file", "dir"]);
+  assertEquals(sort.sortFirstFolders(["df", "df/file"]), ["df/file", "df"]);
+  assertEquals(sort.sortFirstFolders(["df/file", "df"]), ["df/file", "df"]);
 });
 
 Deno.test("sort-iterable: sortsort.cmpFirstFiles basic", () => {
-  assertEquals(sort.sortFirstFiles(["dir", "dir/file"]), ["dir", "dir/file"]);
+  assertEquals(sort.sortFirstFiles(["df", "df/file"]), ["df", "df/file"]);
+  assertEquals(sort.sortFirstFiles(["df/file", "df"]), ["df", "df/file"]);
 });
 
 Deno.test("sort-iterable: sortFileType basic", () => {

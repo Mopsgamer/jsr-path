@@ -10,9 +10,7 @@ export type ShiftResult = {
  * "file" -> ["file", "file", true]
  * "file/" -> ["file", "", false]
  */
-export function shiftPath(
-  p: string,
-): ShiftResult {
+export function shiftPath(p: string): ShiftResult {
   const slashIndex = p.search(/[/\\]/);
   const next = p.slice(0, Math.max(0, slashIndex));
   const other = p.slice(Math.max(0, slashIndex + 1));

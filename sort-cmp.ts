@@ -55,11 +55,12 @@ export function cmpFirstFolders(a: string, b: string): number {
 
     comp = cmpMixed(next1, next2);
 
-    if (comp) break;
-    if (!last1 && !last2) continue;
-    if (last1 && last2) break;
-    if (!last1) return -1;
-    return +1;
+    if (last1 === last2) {
+      if (last1) break;
+      continue;
+    }
+    if (((comp === 0) !== last2) && last1) return +1;
+    return -1;
   }
 
   return comp;
@@ -151,6 +152,5 @@ export function cmpFileType(a: string, b: string): number {
  * Files are interwoven with folders.
  */
 export function cmpMixed(a: string, b: string): number {
-  if (a === b) return 0;
   return a.localeCompare(b, undefined, { ignorePunctuation: false });
 }
