@@ -45,22 +45,19 @@ export function isSortName(value: unknown): value is SortName {
  * Folders are displayed before files.
  */
 export function cmpFirstFolders(a: string, b: string): number {
+  if (a === b) return 0;
+
   let comp = 0;
-  for (; comp === 0;) {
-    const [next1, post1, last1] = shiftPath(a);
+  while (comp === 0) {
+    const { next: next1, other: post1, isLast: last1 } = shiftPath(a);
     a = post1;
-    const [next2, post2, last2] = shiftPath(b);
+    const { next: next2, other: post2, isLast: last2 } = shiftPath(b);
     b = post2;
+
     comp = cmpMixed(next1, next2);
     if (last1 || last2) {
-      if (last1 === last2) {
-        break;
-      }
-
-      if (!last1) {
-        return -1;
-      }
-
+      if (last1 === last2) break;
+      if (!last1) return -1;
       return +1;
     }
   }
@@ -73,22 +70,18 @@ export function cmpFirstFolders(a: string, b: string): number {
  * Files are displayed before folders.
  */
 export function cmpFirstFiles(a: string, b: string): number {
+  if (a === b) return 0;
+
   let comp = 0;
-  for (; comp === 0;) {
-    const [next1, post1, last1] = shiftPath(a);
+  while (comp === 0) {
+    const { next: next1, other: post1, isLast: last1 } = shiftPath(a);
     a = post1;
-    const [next2, post2, last2] = shiftPath(b);
+    const { next: next2, other: post2, isLast: last2 } = shiftPath(b);
     b = post2;
     comp = cmpMixed(next1, next2);
     if (last1 || last2) {
-      if (last1 === last2) {
-        break;
-      }
-
-      if (last1) {
-        return -1;
-      }
-
+      if (last1 === last2) break;
+      if (last1) return -1;
       return +1;
     }
   }
@@ -106,22 +99,24 @@ export function cmpModified(
   timea: number = 0,
   timeb: number = 0,
 ): number {
-  if (a === b) {
-    return 0;
-  }
+  if (a === b) return 0;
 
-  while (true) {
-    const [next1, post1, last1] = shiftPath(a);
+  let comp = 0;
+  while (comp === 0) {
+    const { next: next1, other: post1, isLast: last1 } = shiftPath(a);
     a = post1;
-    const [next2, post2, last2] = shiftPath(b);
+    const { next: next2, other: post2, isLast: last2 } = shiftPath(b);
     b = post2;
 
-    let comp = (timeb - timea) || cmpFirstFolders(next1, next2);
-    if (comp) return comp;
-
-    if (last1) return +1;
-    if (last2) return -1;
+    comp = (timeb - timea) || cmpFirstFolders(next1, next2);
+    if (last1 || last2) {
+      if (last1 === last2) break;
+      if (!last1) return -1;
+      return +1;
+    }
   }
+
+  return comp;
 }
 
 /**
@@ -129,24 +124,21 @@ export function cmpModified(
  * Folders are displayed before files.
  */
 export function cmpFileType(a: string, b: string): number {
+  if (a === b) return 0;
+
   let comp = 0;
-  for (; comp === 0;) {
-    const [next1, post1, last1] = shiftPath(a);
+  while (comp === 0) {
+    const { next: next1, other: post1, isLast: last1 } = shiftPath(a);
     a = post1;
-    const [next2, post2, last2] = shiftPath(b);
+    const { next: next2, other: post2, isLast: last2 } = shiftPath(b);
     b = post2;
+
     const ppa = path.parse(next1);
     const ppb = path.parse(next2);
     comp = cmpMixed(ppa.ext, ppb.ext) || cmpMixed(ppa.name, ppb.name);
     if (last1 || last2) {
-      if (last1 === last2) {
-        break;
-      }
-
-      if (!last1) {
-        return -1;
-      }
-
+      if (last1 === last2) break;
+      if (!last1) return -1;
       return +1;
     }
   }
@@ -159,5 +151,6 @@ export function cmpFileType(a: string, b: string): number {
  * Files are interwoven with folders.
  */
 export function cmpMixed(a: string, b: string): number {
+  if (a === b) return 0;
   return a.localeCompare(b, undefined, { ignorePunctuation: false });
 }

@@ -8,9 +8,9 @@ import * as sort from "./sort.ts";
 import { shiftPath } from "./shift.ts";
 
 Deno.test("shiftPath - examples", () => {
-  assertEquals(shiftPath("path/to/the/file"), ["path", "to/the/file", false]);
-  assertEquals(shiftPath("file"), ["file", "file", true]);
-  assertEquals(shiftPath("file/"), ["file", "", false]);
+  assertEquals(shiftPath("path/to/the/file"), {next: "path", other:"to/the/file", isLast:false});
+  assertEquals(shiftPath("file"), {next: "file", other:"file", isLast:true});
+  assertEquals(shiftPath("file/"), {next: "file", other:"", isLast:false});
 });
 
 Deno.test("sort.isSortName - true/false", () => {
@@ -84,14 +84,14 @@ Deno.test("modified comparator", () => {
   assertLess(sort.cmpModified("a/file1", "a/file2", 200, 200), 0);
 
   // Folder with same modified date as file
-  assertGreater(sort.cmpModified("a/fzlder/b", "a/file", 200, 200), 0);
-  assertGreater(sort.cmpModified("a/fzlder/b/c", "a/file", 200, 200), 0);
-  assertGreater(sort.cmpModified("a/fzlder/b/c/d", "a/file", 200, 200), 0);
+  assertLess(sort.cmpModified("a/fzlder/b", "a/file", 200, 200), 0);
+  assertLess(sort.cmpModified("a/fzlder/b/c", "a/file", 200, 200), 0);
+  assertLess(sort.cmpModified("a/fzlder/b/c/d", "a/file", 200, 200), 0);
   assertLess(sort.cmpModified("a/file/b", "a/file", 200, 200), 0);
 
-  assertLess(sort.cmpModified("a/file", "a/fzlder/b", 200, 200), 0);
-  assertLess(sort.cmpModified("a/file", "a/fzlder/b/c", 200, 200), 0);
-  assertLess(sort.cmpModified("a/file", "a/fzlder/b/c/d", 200, 200), 0);
+  assertGreater(sort.cmpModified("a/file", "a/fzlder/b", 200, 200), 0);
+  assertGreater(sort.cmpModified("a/file", "a/fzlder/b/c", 200, 200), 0);
+  assertGreater(sort.cmpModified("a/file", "a/fzlder/b/c/d", 200, 200), 0);
   assertGreater(sort.cmpModified("a/file", "a/file/b", 200, 200), 0);
 });
 
