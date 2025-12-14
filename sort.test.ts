@@ -81,8 +81,8 @@ Deno.test("modified comparator", () => {
   assertGreater(sort.cmpModified("a/file", "b/file", 100, 200), 0);
 
   // File vs folder (folders first)
-  assertLess(sort.cmpModified("a/file", "a/folder", 200, 100), 1);
-  assertGreater(sort.cmpModified("a/folder", "a/file", 100, 200), -1);
+  assertLess(sort.cmpModified("a/file", "a/folder", 200, 100), 0);
+  assertGreater(sort.cmpModified("a/folder", "a/file", 100, 200), 0);
 
   // Folder vs folder, different dates
   assertLess(sort.cmpModified("a/folder1", "a/folder2", 200, 100), 0);
@@ -92,14 +92,14 @@ Deno.test("modified comparator", () => {
   assertLess(sort.cmpModified("a/file1", "a/file2", 200, 200), 0);
 
   // Folder with same modified date as file
-  assertLess(sort.cmpModified("a/fzlder/b", "a/file", 200, 200), 0);
-  assertLess(sort.cmpModified("a/fzlder/b/c", "a/file", 200, 200), 0);
-  assertLess(sort.cmpModified("a/fzlder/b/c/d", "a/file", 200, 200), 0);
+  assertGreater(sort.cmpModified("a/fzlder/b", "a/file", 200, 200), 0);
+  assertGreater(sort.cmpModified("a/fzlder/b/c", "a/file", 200, 200), 0);
+  assertGreater(sort.cmpModified("a/fzlder/b/c/d", "a/file", 200, 200), 0);
   assertLess(sort.cmpModified("a/file/b", "a/file", 200, 200), 0);
 
-  assertGreater(sort.cmpModified("a/file", "a/fzlder/b", 200, 200), 0);
-  assertGreater(sort.cmpModified("a/file", "a/fzlder/b/c", 200, 200), 0);
-  assertGreater(sort.cmpModified("a/file", "a/fzlder/b/c/d", 200, 200), 0);
+  assertLess(sort.cmpModified("a/file", "a/fzlder/b", 200, 200), 0);
+  assertLess(sort.cmpModified("a/file", "a/fzlder/b/c", 200, 200), 0);
+  assertLess(sort.cmpModified("a/file", "a/fzlder/b/c/d", 200, 200), 0);
   assertGreater(sort.cmpModified("a/file", "a/file/b", 200, 200), 0);
 });
 
