@@ -132,7 +132,7 @@ export function pathObjectFrom(
   let root: PathRecord = {};
 
   for (const element of iterable) {
-    let {next, other, isLast} = shiftPath(element);
+    let { next, other, isLast } = shiftPath(element);
 
     let parent: PathRecord = root;
     if (isLast) {
@@ -145,7 +145,11 @@ export function pathObjectFrom(
 
     while (!isLast || (parent[next] = "")) {
       parent = child as { [key: string]: PathRecord };
-      const {next: nextNew, other: otherNew, isLast: isLastNew} = shiftPath(other);
+      const {
+        next: nextNew,
+        other: otherNew,
+        isLast: isLastNew,
+      } = shiftPath(other);
       [next, other, isLast] = [nextNew, otherNew, isLastNew];
       child = parent[next] ?? {};
       parent[next] = child;
