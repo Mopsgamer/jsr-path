@@ -1,3 +1,9 @@
+export type ShiftResult = {
+  next: string;
+  other: string;
+  isLast: boolean;
+};
+
 /**
  * @example
  * "path/to/the/file" -> ["path", "to/the/file", false]
@@ -6,10 +12,17 @@
  */
 export function shiftPath(
   p: string,
-): [next: string, other: string, isLast: boolean] {
+): ShiftResult {
   const slashIndex = p.search(/[/\\]/);
   const next = p.slice(0, Math.max(0, slashIndex));
   const other = p.slice(Math.max(0, slashIndex + 1));
-  const isLast = next === "";
-  return [slashIndex < 0 ? other : next, other, isLast];
+  const r: ShiftResult = {
+    next: next,
+    other: other,
+    isLast: next == "",
+  };
+  if (slashIndex < 0) {
+    r.next = r.other;
+  }
+  return r;
 }
