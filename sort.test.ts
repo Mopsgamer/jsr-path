@@ -52,21 +52,33 @@ Deno.test("sort.cmpFirstFolders puts folders before files", () => {
       "df/file",
     ],
   );
+});
+Deno.test("sort.cmpFirstFolders puts src/ before src/targets/yarn.ts", () => {
   assertEquals(
     ["src/targets/yarn.ts", "src/"].sort(sort.cmpFirstFolders),
     ["src/", "src/targets/yarn.ts"],
   );
   assertEquals(
+    ["src/", "src/targets/yarn.ts"].sort(sort.cmpFirstFolders),
+    ["src/", "src/targets/yarn.ts"],
+  );
+});
+Deno.test("sort.cmpFirstFolders puts .vscode/extensions.json before .gitignore", () => {
+  assertEquals(
     [".gitignore", ".vscode/extensions.json"].sort(sort.cmpFirstFolders),
     [".vscode/extensions.json", ".gitignore"],
   );
+});
+Deno.test("sort.cmpFirstFolders puts .gitignore before .vscode/", () => {
   assertEquals(
     [".gitignore", ".vscode/"].sort(sort.cmpFirstFolders),
     [".vscode/", ".gitignore"],
   );
+});
+Deno.test("sort.cmpFirstFolders puts bin/ before package.json", () => {
   assertEquals(
-    ["tsconfig.prod.json", "internal/patterns/gitignore.go"].sort(sort.cmpFirstFolders),
-    ["internal/patterns/gitignore.go", "tsconfig.prod.json"],
+    ["bin/", "package.json"].sort(sort.cmpFirstFolders),
+    ["bin/", "package.json"],
   );
 });
 
@@ -90,6 +102,12 @@ Deno.test("sort.cmpFirstFiles puts files before folders", () => {
   assertEquals(
     [".vscode/", ".gitignore"].sort(sort.cmpFirstFiles),
     [".gitignore", ".vscode/"],
+  );
+});
+Deno.test("sort.cmpFirstFiles puts bin/ before package.json", () => {
+  assertEquals(
+    ["bin/", "package.json"].sort(sort.cmpFirstFiles),
+    ["package.json", "bin/"],
   );
 });
 

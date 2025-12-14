@@ -1,14 +1,14 @@
 {
   "name": "@m234/path",
   "description": "Sort, parse and format a path array/object.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "tasks": {
     "publish": {
       "command": "deno publish",
       "dependencies": ["prepare"]
     },
-    "prepare": "deno check && deno test --coverage && deno lint && deno task badge:tests && deno fmt",
-    "badge:tests": "deno run -A scripts/badge-tests.ts"
+    "prepare": "deno check && deno test --coverage && deno lint && deno fmt --check",
+    "badge:tests": "deno run -A scripts/badge-tests.ts && deno fmt assets"
   },
   "lint": {
     "rules": {
