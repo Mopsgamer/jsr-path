@@ -8,9 +8,17 @@ import * as sort from "./sort.ts";
 import { shiftPath } from "./shift.ts";
 
 Deno.test("shiftPath - examples", () => {
-  assertEquals(shiftPath("path/to/the/file"), {next: "path", other:"to/the/file", isLast:false});
-  assertEquals(shiftPath("file"), {next: "file", other:"file", isLast:true});
-  assertEquals(shiftPath("file/"), {next: "file", other:"", isLast:false});
+  assertEquals(shiftPath("path/to/the/file"), {
+    next: "path",
+    other: "to/the/file",
+    isLast: false,
+  });
+  assertEquals(shiftPath("file"), {
+    next: "file",
+    other: "file",
+    isLast: true,
+  });
+  assertEquals(shiftPath("file/"), { next: "file", other: "", isLast: false });
 });
 
 Deno.test("sort.isSortName - true/false", () => {
@@ -123,10 +131,10 @@ Deno.test("sort-iterable: sortsort.cmpFirstFiles basic", () => {
 });
 
 Deno.test("sort-iterable: sortFileType basic", () => {
-  assertEquals(sort.sortFileType(["a.txt", "b.md", "a.md"]), [
-    "a.md",
-    "b.md",
-    "a.txt",
+  assertEquals(sort.sortFileType(["a.a", "b.a", "a.b"]), [
+    "a.a",
+    "b.a",
+    "a.b",
   ]);
 });
 
